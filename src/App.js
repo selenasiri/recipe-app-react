@@ -4,6 +4,7 @@ import './App.css';
 
 const App = () => {
 const [query, setQuery] = useState("")
+const [recipes, setRecipes] = useState([])
 
 const APP_ID = "e83f5706";
 
@@ -13,15 +14,16 @@ const url = `https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=$
 
 const getData = async () => {
   const result = await Axios.get(url);
-
-  console.log(result)
+setRecipes(result.data.hits)
+  console.log(result);
+  setQuery("");
 }
 
-const onChange = (e) => {
+const onChange = e => {
 setQuery(e.target.value);
 }
 
-const onSubmit = (e) => {
+const onSubmit = e => {
   e.preventDefault();
   getData();
 }
@@ -30,9 +32,24 @@ const onSubmit = (e) => {
     <div className="App">
       <h1 onClick={getData}>Food Searching App</h1>
       <form className="search-form" onSubmit={onSubmit}>
-        <input type="text" placeholder="Search Food" autoComplete="off" onChange={onChange} />
-        <input type="text" type="submit" alue="search" />
+        <input 
+        type="text" 
+        placeholder="Search Food" 
+        autoComplete="off" 
+        onChange={onChange} 
+        value={query} 
+        />
+        <input type="text" 
+        type="submit" 
+        value="search" />
       </form>
+      <div className="recipes">
+        {recipes !==[] && recipes.map(recipe => 
+          <h2>
+            {recipe.recipe.label}
+          </h2>
+        )};
+      </div>
     </div>
   );
 }
