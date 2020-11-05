@@ -19,8 +19,12 @@ const url = `https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=$
 const getData = async () => {
   if(query !== "") {
     const result = await Axios.get(url);
+    if(!result.data.more) {
+      return setAlert("No food with such name");
+    }
     setRecipes(result.data.hits)
-   console.log(result);
+    console.log(result);
+    setAlert("");
     setQuery("");
   } else {
     setAlert('Please fill the form')
